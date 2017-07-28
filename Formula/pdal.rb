@@ -11,6 +11,8 @@ class Pdal < Formula
     sha256 "7af040afe945077595f4160d6ef220e5e36965afeb59d2b066788e701516c99f" => :yosemite
   end
 
+  option "with-jni", "Build the Java JNI bindings"
+
   depends_on "cmake" => :build
   depends_on "gdal"
   depends_on "laszip" => :optional
@@ -33,6 +35,10 @@ class Pdal < Formula
       # Reported 7 Apr 2017 https://github.com/PDAL/PDAL/issues/1558
       inreplace "CMakeLists.txt", /^        \${LASZIP_INCLUDE_DIR}\n/, ""
       args << "-DWITH_LASZIP=FALSE"
+    end
+
+    if build.with? "jni"
+      args << "-DWITH_PDAL_JNI=TRUE"
     end
 
     system "cmake", ".", *args
